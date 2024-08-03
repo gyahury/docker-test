@@ -1,0 +1,67 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+            username: ${{ secrets.DOCKERHUB_USERNAME }}
+            password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/testapp:latest
+          context: .
+          file: ./Dockerfile
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Update or Create Service on Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            if docker service inspect testapp > /dev/null 2>&1; then
+              echo "Updating existing service..."
+              docker service update 
+              --env-add SERVER_PORT=${{ secrets.SERVER_PORT }} \
+              --env-add MYSQL_PORT=${{ secrets.MYSQL_PORT }} \
+              --env-add MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }} \
+              --env-add MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }} \
+              --env-add MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} \
+              --env-add MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
+              --env-add ACME_EMAIL=${{ secrets.ACME_EMAIL }} \
+              --image ${{ secrets.DOCKERHUB_USERNAME }}/testapp:latest testapp
+            else
+              echo "Creating new service..."
+              docker service create \
+              --name testapp \
+              --replicas 3 \
+              --publish published=80,target=80 \
+              --env-add SERVER_PORT=${{ secrets.SERVER_PORT }} \
+              --env-add MYSQL_PORT=${{ secrets.MYSQL_PORT }} \
+              --env-add MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }} \
+              --env-add MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }} \
+              --env-add MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} \
+              --env-add MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
+              --env-add ACME_EMAIL=${{ secrets.ACME_EMAIL }} \
+              --update-delay 10s \
+              --update-parallelism 1 \
+              ${{ secrets.DOCKERHUB_USERNAME }}/testapp:latest
+            fi
