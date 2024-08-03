@@ -22,6 +22,10 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://db:${{ secrets.MYSQL_PORT }/${{ secrets.MYSQL_DATABASE }}?serverTimezone=Asia/Seoul
+          SPRING_DATASOURCE_USERNAME: ${{ secrets.MYSQL_USERNAME }}
+          SPRING_DATASOURCE_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
         run: ./gradlew build
 
       - name: Log in to Docker Hub
