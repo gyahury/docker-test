@@ -17,6 +17,10 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '17'
+          
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
@@ -41,6 +45,7 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/testapp:latest
           context: .
           file: ./Dockerfile
+          platforms: linux/amd64,linux/arm64
 
   deploy:
     runs-on: ubuntu-latest
