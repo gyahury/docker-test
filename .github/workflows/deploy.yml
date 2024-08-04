@@ -54,6 +54,7 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
+            source ~/.zshrc
             if docker service inspect testapp > /dev/null 2>&1; then
               echo "Updating existing service..."
               docker service update 
