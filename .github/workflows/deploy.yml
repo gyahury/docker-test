@@ -8,6 +8,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      SERVER_PORT: ${{ secrets.SERVER_PORT }}
+      MYSQL_PORT: ${{ secrets.MYSQL_PORT }}
+      MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+      MYSQL_USERNAME: ${{ secrets.MYSQL_USERNAME }}
+      MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+      MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+      ACME_EMAIL: ${{ secrets.ACME_EMAIL }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -32,12 +40,6 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        env:
-          SERVER_PORT: ${{ secrets.SERVER_PORT }}
-          MYSQL_PORT: ${{ secrets.MYSQL_PORT }}
-          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
-          MYSQL_USERNAME: ${{ secrets.MYSQL_USERNAME }}
-          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
         run: ./gradlew build
 
       - name: Log in to Docker Hub
