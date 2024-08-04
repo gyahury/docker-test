@@ -63,13 +63,6 @@ jobs:
             if docker service inspect testapp > /dev/null 2>&1; then
               echo "Updating existing service..."
               docker service update 
-              --env-add SERVER_PORT=${{ secrets.SERVER_PORT }} \
-              --env-add MYSQL_PORT=${{ secrets.MYSQL_PORT }} \
-              --env-add MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }} \
-              --env-add MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }} \
-              --env-add MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} \
-              --env-add MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
-              --env-add ACME_EMAIL=${{ secrets.ACME_EMAIL }} \
               --image ${{ secrets.DOCKERHUB_USERNAME }}/testapp:latest testapp
             else
               echo "Creating new service..."
