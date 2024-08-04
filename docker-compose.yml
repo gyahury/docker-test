@@ -2,6 +2,7 @@ version: '3.8'
 services:
   traefik:
     image: traefik:v2.4
+    platform: linux/arm64 # 개발 환경에서 제거
     command:
       - "--api.insecure=true"
       - "--providers.docker=true"
@@ -20,6 +21,7 @@ services:
 
   app:
     build: .
+    platform: linux/arm64 # 개발 환경에서 제거
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
     environment:
@@ -37,6 +39,7 @@ services:
 
   db:
     image: mysql:5.7
+    platform: linux/arm64 # 개발 환경에서 제거
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
