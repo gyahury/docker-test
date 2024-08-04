@@ -25,6 +25,7 @@ jobs:
       - name: Set up Docker and Docker Compose
         run: |
           sudo apt-get update
+          sudo apt-get remove containerd containerd.io
           sudo apt-get install -y docker.io docker-compose
           
       - name: Grant execute permission for gradlew
