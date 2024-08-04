@@ -28,7 +28,7 @@ services:
       SPRING_DATASOURCE_USERNAME: ${MYSQL_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
     labels:
-      - "traefik.http.routers.app.rule=Host(`example1231231231232.com`)"
+      - "traefik.http.routers.app.rule=Host(`docker-test-boot.duckdns.org`)"
       - "traefik.http.routers.app.entrypoints=websecure"
       - "traefik.http.routers.app.tls.certresolver=myresolver"
       - "traefik.port=${SERVER_PORT}"
