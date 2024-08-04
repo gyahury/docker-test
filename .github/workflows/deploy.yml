@@ -72,14 +72,12 @@ jobs:
               --name testapp \
               --replicas 3 \
               --publish published=80,target=80 \
-              --env-add SERVER_PORT=${{ secrets.SERVER_PORT }} \
-              --env-add MYSQL_PORT=${{ secrets.MYSQL_PORT }} \
-              --env-add MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }} \
-              --env-add MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }} \
-              --env-add MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} \
-              --env-add MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
-              --env-add ACME_EMAIL=${{ secrets.ACME_EMAIL }} \
-              --update-delay 10s \
-              --update-parallelism 1 \
+              --e SERVER_PORT=${{ secrets.SERVER_PORT }} \
+              --e MYSQL_PORT=${{ secrets.MYSQL_PORT }} \
+              --e MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }} \
+              --e MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }} \
+              --e MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} \
+              --e MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
+              --e ACME_EMAIL=${{ secrets.ACME_EMAIL }} \
               ${{ secrets.DOCKERHUB_USERNAME }}/testapp:latest
             fi
