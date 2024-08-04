@@ -1,8 +1,10 @@
 version: '3.8'
 services:
   traefik:
-    image: gyahury/traefik:v2.4
-    platform: linux/arm64 # 개발 환경에서 제거
+    image: gyahury/traefik:lastest
+    #image: traefik:v2.4
+    build: ./traefik
+    platform: linux/amd64 # 개발 환경에서 제거
     command:
       - "--api.insecure=true"
       - "--providers.docker=true"
@@ -22,7 +24,7 @@ services:
   app:
     image: gyahury/testapp:lastest
     build: .
-    platform: linux/arm64 # 개발 환경에서 제거
+    platform: linux/amd64 # 개발 환경에서 제거
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
     environment:
@@ -39,8 +41,10 @@ services:
       - db
 
   db:
-    image: gyahury/mysql:5.7
-    platform: linux/arm64 # 개발 환경에서 제거
+    #image: mysql:v5.7
+    image: gyahury/mysql:lastest
+    build: ./db
+    platform: linux/amd64 # 개발 환경에서 제거
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
