@@ -21,6 +21,13 @@ services:
   app:
     image: ${MYSQL_USERNAME}/testapp:latest
     build: .
+    deploy:
+      replicas: 3
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
     environment:
