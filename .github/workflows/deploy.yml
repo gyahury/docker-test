@@ -63,5 +63,5 @@ jobs:
           script: |
             source ~/.zshrc
             echo "Updating existing service..."
-            docker service update --image ${{ secrets.DOCKERHUB_USERNAME }}/testapp:latest testapp
+            docker service update --image ${{ secrets.DOCKERHUB_USERNAME }}/testapp:latest myapp_app
             echo "Updating existing service finished"
