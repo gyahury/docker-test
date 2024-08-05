@@ -62,22 +62,7 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script: |
             source ~/.zshrc
-            if docker service inspect testapp > /dev/null 2>&1; then
-              echo "Updating existing service..."
-              docker service update 
-              --image ${{ secrets.DOCKERHUB_USERNAME }}/testapp:latest testapp
-            else
-              echo "Creating new service..."
-              docker service create \
-              --name testapp \
-              --replicas 3 \
-              --publish published=80,target=80 \
-              -e SERVER_PORT=${{ secrets.SERVER_PORT }} \
-              -e MYSQL_PORT=${{ secrets.MYSQL_PORT }} \
-              -e MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }} \
-              -e MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }} \
-              -e MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} \
-              -e MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
-              -e ACME_EMAIL=${{ secrets.ACME_EMAIL }} \
-              ${{ secrets.DOCKERHUB_USERNAME }}/testapp:latest
-            fi
+            echo "Updating existing service..."
+            docker service update 
+            --image ${{ secrets.DOCKERHUB_USERNAME }}/testapp:latest testapp
+            echo "Updating existing service finished"
