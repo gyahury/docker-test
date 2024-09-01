@@ -20,7 +20,6 @@ services:
 
   app:
     image: ${MYSQL_USERNAME}/testapp:latest
-    build: .
     deploy:
       replicas: 3
       update_config:
